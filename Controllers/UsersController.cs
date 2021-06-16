@@ -41,6 +41,7 @@ namespace ubereats_user_auth.Controllers
             return user;
         }
 
+
         // PUT: api/Users/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
