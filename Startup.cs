@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -25,6 +26,10 @@ namespace ubereats_user_auth
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+
+            services.AddDbContext<ubereats_user_auth.Model.UberEatsAuthContext>(options =>
+            options.UseSqlServer(Configuration.GetConnectionString("UberEatsDb")));
+
             services.AddControllers();
         }
 
@@ -38,6 +43,13 @@ namespace ubereats_user_auth
 
             app.UseHttpsRedirection();
 
+            app.UseCors(x => x
+            //.WithOrigins("http//localhost:8080")
+            .AllowAnyMethod()
+            .AllowAnyHeader()
+            .SetIsOriginAllowed(origin => true) // allow any origin
+            .AllowCredentials()); // allow credentials
+            
             app.UseRouting();
 
             app.UseAuthorization();

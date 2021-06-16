@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Metadata;
 
 #nullable disable
 
-namespace ubereats_user_auth
+namespace ubereats_user_auth.Model
 {
     public partial class UberEatsAuthContext : DbContext
     {
@@ -34,23 +34,26 @@ namespace ubereats_user_auth
 
             modelBuilder.Entity<User>(entity =>
             {
-                entity.HasNoKey();
-
                 entity.ToTable("User");
 
-                entity.Property(e => e.Email).HasMaxLength(50);
+                entity.Property(e => e.Email)
+                    .IsRequired()
+                    .HasMaxLength(50);
 
                 entity.Property(e => e.FirstName)
+                    .IsRequired()
                     .HasMaxLength(50)
                     .HasColumnName("First_Name");
 
-                entity.Property(e => e.Id).ValueGeneratedOnAdd();
-
                 entity.Property(e => e.LastName)
+                    .IsRequired()
                     .HasMaxLength(50)
                     .HasColumnName("Last_Name");
 
+                entity.Property(e => e.Password).IsRequired();
+
                 entity.Property(e => e.Role)
+                    .IsRequired()
                     .HasMaxLength(10)
                     .IsFixedLength(true);
             });

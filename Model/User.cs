@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 #nullable disable
 
-namespace ubereats_user_auth
+namespace ubereats_user_auth.Model
 {
     public partial class User
     {
