@@ -14,5 +14,6 @@ namespace ubereats_user_auth.Model
         public string Password { get; set; }
         public string Role { get; set; }
         public string RefreshToken { get; set; }
+        public bool IsValid { get; set; }
     }
 }

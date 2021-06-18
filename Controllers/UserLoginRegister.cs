@@ -36,6 +36,34 @@ namespace ubereats_user_auth.Controllers
             if (_userData.Mail != null && _userData.Password != null)
             {
                 User user = await GetUser(_userData.Mail, _userData.Password);
+                if (user.Role != "Customer" || user.Role != "Commercial" || user.Role != "Admin" && user.IsValid == true)
+                    return BadRequest("Invalid credentials");
+                if (user != null)
+                {
+                    return user;
+                }
+                else
+                {
+                    return BadRequest("Invalid credentials");
+                }
+            }
+            else
+            {
+                return BadRequest("lack of params");
+            }
+        }
+
+        // POST: api/auth/login
+        [HttpPost("login/admin")]
+        public async Task<ActionResult<User>> LoginAdmin([FromBody] UserData _userData)
+        {
+
+            if (_userData.Mail != null && _userData.Password != null)
+            {
+                User user = await GetUser(_userData.Mail, _userData.Password);
+
+                if(user.Role != "Commercial" || user.Role != "Admin" || user.Role != "Restorer" || user.Role == "Developer" && user.IsValid == true)
+                    return BadRequest("Invalid credentials");
 
                 if (user != null)
                 {
@@ -67,7 +95,8 @@ namespace ubereats_user_auth.Controllers
                     Password = ComputeSha256Hash(user.Password),
                     FirstName = user.FirstName,
                     LastName = user.LastName,
-                    Role = user.Role
+                    Role = "Customer",
+                    IsValid = true
                 };
                 _context.Users.Add(user);
                 await _context.SaveChangesAsync();

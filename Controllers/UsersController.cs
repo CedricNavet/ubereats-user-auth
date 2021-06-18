@@ -24,7 +24,13 @@ namespace ubereats_user_auth.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<User>>> GetUsers()
         {
-            return await _context.Users.ToListAsync();
+            var result = await _context.Users.Where(x => x.Role == "Customer" && x.IsValid == true).ToListAsync();
+            foreach (var item in result)
+            {
+                item.RefreshToken = "";
+                item.Password = "";
+            }
+            return result;
         }
 
         // GET: api/Users/5
@@ -38,6 +44,11 @@ namespace ubereats_user_auth.Controllers
                 return NotFound();
             }
 
+            if (user.IsValid == false)
+                return NotFound();
+
+            user.Password = "";
+            user.RefreshToken = "";
             return user;
         }
 
@@ -90,12 +101,26 @@ namespace ubereats_user_auth.Controllers
         {
             var user = await _context.Users.FindAsync(id);
             if (user == null)
-            {
                 return NotFound();
-            }
 
-            _context.Users.Remove(user);
-            await _context.SaveChangesAsync();
+            user.IsValid = false;
+             _context.Entry(user).State = EntityState.Modified;
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!UserExists(id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
 
             return NoContent();
         }
