@@ -21,9 +21,9 @@ namespace ubereats_user_auth.Controllers
             public string Password { get; set; }
         }
 
-        private readonly UberEatsAuthContext _context;
+        private readonly UberEatsAuthDBContext _context;
 
-        public UserLoginRegister(UberEatsAuthContext context)
+        public UserLoginRegister(UberEatsAuthDBContext context)
         {
             _context = context;
         }

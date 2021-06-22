@@ -13,9 +13,9 @@ namespace ubereats_user_auth.Controllers
     [ApiController]
     public class UsersController : ControllerBase
     {
-        private readonly UberEatsAuthContext _context;
+        private readonly UberEatsAuthDBContext _context;
 
-        public UsersController(UberEatsAuthContext context)
+        public UsersController(UberEatsAuthDBContext context)
         {
             _context = context;
         }

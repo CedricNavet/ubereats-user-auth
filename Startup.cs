@@ -27,7 +27,7 @@ namespace ubereats_user_auth
         public void ConfigureServices(IServiceCollection services)
         {
 
-            services.AddDbContext<ubereats_user_auth.Model.UberEatsAuthContext>(options =>
+            services.AddDbContext<ubereats_user_auth.Model.UberEatsAuthDBContext>(options =>
             options.UseSqlServer(Configuration.GetConnectionString("UberEatsDb")));
 
             services.AddControllers();

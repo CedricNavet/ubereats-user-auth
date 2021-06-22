@@ -6,19 +6,18 @@ using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace ubereats_user_auth.Model
 {
-    public partial class UberEatsAuthContext : DbContext
+    public partial class UberEatsAuthDBContext : DbContext
     {
-        public UberEatsAuthContext()
+        public UberEatsAuthDBContext()
         {
         }
 
-        public UberEatsAuthContext(DbContextOptions<UberEatsAuthContext> options)
+        public UberEatsAuthDBContext(DbContextOptions<UberEatsAuthDBContext> options)
             : base(options)
         {
         }
 
         public virtual DbSet<User> Users { get; set; }
-
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -50,6 +49,11 @@ namespace ubereats_user_auth.Model
                     .IsRequired()
                     .HasMaxLength(10)
                     .IsFixedLength(true);
+
+                entity.HasOne(d => d.MentoringNavigation)
+                    .WithMany(p => p.InverseMentoringNavigation)
+                    .HasForeignKey(d => d.Mentoring)
+                    .HasConstraintName("FK_User_User");
             });
 
             OnModelCreatingPartial(modelBuilder);
