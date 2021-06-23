@@ -24,7 +24,7 @@ namespace ubereats_user_auth.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<User>>> GetUsers()
         {
-            var result = await _context.Users.Where(x => x.Role == "Customer" && x.IsValid == true).ToListAsync();
+            var result = await _context.Users.Where(x => x.Role.Trim() == "Customer" && x.IsValid == true).ToListAsync();
             foreach (var item in result)
             {
                 item.RefreshToken = "";

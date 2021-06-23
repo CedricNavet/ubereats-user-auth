@@ -36,15 +36,15 @@ namespace ubereats_user_auth.Controllers
             if (_userData.Mail != null && _userData.Password != null)
             {
                 User user = await GetUser(_userData.Mail, _userData.Password);
-                if (user.Role != "Customer" || user.Role != "Commercial" || user.Role != "Admin" && user.IsValid == true)
-                    return BadRequest("Invalid credentials");
+                if (user.Role.Trim() != "Customer" || user.IsValid == false)
+                    return BadRequest("Can't connect with this account");
                 if (user != null)
                 {
                     return user;
                 }
                 else
                 {
-                    return BadRequest("Invalid credentials");
+                    return BadRequest("Cannot find user");
                 }
             }
             else
@@ -62,7 +62,7 @@ namespace ubereats_user_auth.Controllers
             {
                 User user = await GetUser(_userData.Mail, _userData.Password);
 
-                if(user.Role != "Commercial" || user.Role != "Admin" || user.Role != "Restorer" || user.Role == "Developer" && user.IsValid == true)
+                if(user.Role.Trim() == "Customer" || user.IsValid == true)
                     return BadRequest("Invalid credentials");
 
                 if (user != null)
@@ -71,7 +71,7 @@ namespace ubereats_user_auth.Controllers
                 }
                 else
                 {
-                    return BadRequest("Invalid credentials");
+                    return BadRequest("Cannot find user");
                 }
             }
             else
