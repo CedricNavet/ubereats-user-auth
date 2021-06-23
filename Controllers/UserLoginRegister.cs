@@ -32,15 +32,17 @@ namespace ubereats_user_auth.Controllers
         [HttpPost("login")]
         public async Task<ActionResult<User>> Login([FromBody] UserData _userData)
         {
-
+            
             if (_userData.Mail != null && _userData.Password != null)
             {
                 User user = await GetUser(_userData.Mail, _userData.Password);
+
                 if (user.Role.Trim() != "Customer" || user.IsValid == false)
                     return Unauthorized("Can't connect with this account");
 
                 if (user != null)
                 {
+                    user.Password = "";
                     return user;
                 }
                 else
@@ -116,7 +118,7 @@ namespace ubereats_user_auth.Controllers
 
         private async Task<User> GetUser(string identifiant, string password)
         {
-            return await _context.Users.Where(x => x.Email == identifiant && x.Password == ComputeSha256Hash(password)).FirstOrDefaultAsync();
+            return await _context.Users.Where(x => x.Email.Trim() == identifiant && x.Password.Trim() == ComputeSha256Hash(password)).FirstOrDefaultAsync();
         }
 
         private string ComputeSha256Hash(string rawData)
