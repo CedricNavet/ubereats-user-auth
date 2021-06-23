@@ -89,7 +89,7 @@ namespace ubereats_user_auth.Controllers
                 if (_context.Users.Any(client => client.Email == user.Email))
                     return Unauthorized();
 
-                new User()
+                User userR = new User()
                 {
                     Email = user.Email,
                     Password = ComputeSha256Hash(user.Password),
@@ -98,8 +98,7 @@ namespace ubereats_user_auth.Controllers
                     Role = "Customer",
                     IsValid = true
                 };
-                user.Role = "Customer";
-                _context.Users.Add(user);
+                _context.Users.Add(userR);
                 await _context.SaveChangesAsync();
 
                 return user;
