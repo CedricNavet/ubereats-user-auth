@@ -98,6 +98,7 @@ namespace ubereats_user_auth.Controllers
                     Role = "Customer",
                     IsValid = true
                 };
+                user.Role = "Customer";
                 _context.Users.Add(user);
                 await _context.SaveChangesAsync();
 
