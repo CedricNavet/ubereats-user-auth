@@ -58,15 +58,17 @@ namespace ubereats_user_auth.Controllers
         public async Task<ActionResult<User>> LoginAdmin([FromBody] UserData _userData)
         {
 
+
             if (_userData.Mail != null && _userData.Password != null)
             {
                 User user = await GetUser(_userData.Mail, _userData.Password);
 
-                if(user.Role.Trim() == "Customer" || user.IsValid == true)
+                if (user.Role.Trim() == "Customer" || user.IsValid != true)
                     return BadRequest("Invalid credentials");
 
                 if (user != null)
                 {
+                    user.Password = "";
                     return user;
                 }
                 else
