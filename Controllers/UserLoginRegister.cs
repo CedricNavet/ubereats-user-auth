@@ -37,7 +37,7 @@ namespace ubereats_user_auth.Controllers
             {
                 User user = await GetUser(_userData.Mail, _userData.Password);
                 if (user.Role.Trim() != "Customer" || user.IsValid == false)
-                    return BadRequest("Can't connect with this account");
+                    return Unauthorized("Can't connect with this account");
 
                 if (user != null)
                 {
@@ -65,7 +65,7 @@ namespace ubereats_user_auth.Controllers
                 User user = await GetUser(_userData.Mail, _userData.Password);
 
                 if (user.Role.Trim() == "Customer" || user.IsValid != true)
-                    return BadRequest("Invalid credentials");
+                    return Unauthorized("Invalid credentials");
 
                 if (user != null)
                 {
