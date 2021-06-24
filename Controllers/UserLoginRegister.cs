@@ -60,29 +60,37 @@ namespace ubereats_user_auth.Controllers
         [HttpPost("login/admin")]
         public async Task<ActionResult<User>> LoginAdmin([FromBody] UserData _userData)
         {
-
-
-            if (_userData.Mail != null && _userData.Password != null)
+            try
             {
-                User user = await GetUser(_userData.Mail, _userData.Password);
-
-                if (user.Role.Trim() == "Customer" || user.IsValid != true)
-                    return Unauthorized("Invalid credentials");
-
-                if (user != null)
+                if (_userData.Mail != null && _userData.Password != null)
                 {
-                    user.Password = "";
-                    return user;
+                    User user = await GetUser(_userData.Mail, _userData.Password);
+
+                    if (user.Role.Trim() == "Customer" || user.IsValid != true)
+                        return Unauthorized("Invalid credentials");
+
+                    if (user != null)
+                    {
+                        user.Password = "";
+                        return user;
+                    }
+                    else
+                    {
+                        return BadRequest("Cannot find user");
+                    }
                 }
                 else
                 {
-                    return BadRequest("Cannot find user");
+                    return BadRequest("lack of params");
                 }
             }
-            else
+            catch (Exception e)
             {
-                return BadRequest("lack of params");
+
+                return BadRequest(e.Message);
             }
+
+           
         }
 
         // POST: api/auth/register
