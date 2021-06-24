@@ -37,11 +37,11 @@ namespace ubereats_user_auth.Controllers
             {
                 User user = await GetUser(_userData.Mail, _userData.Password);
 
-                if (user.Role.Trim() != "Customer" || user.IsValid == false)
-                    return Unauthorized("Can't connect with this account");
-
                 if (user != null)
                 {
+                    if (user.Role.Trim() != "Customer" || user.IsValid == false)
+                        return Unauthorized("Can't connect with this account");
+
                     user.Password = "";
                     return user;
                 }
@@ -66,11 +66,11 @@ namespace ubereats_user_auth.Controllers
                 {
                     User user = await GetUser(_userData.Mail, _userData.Password);
 
-                    if (user.Role.Trim() == "Customer" || user.IsValid != true)
-                        return Unauthorized("Invalid credentials");
-
                     if (user != null)
                     {
+                        if (user.Role.Trim() == "Customer" || user.IsValid != true)
+                            return Unauthorized("Invalid credentials");
+
                         user.Password = "";
                         return user;
                     }
