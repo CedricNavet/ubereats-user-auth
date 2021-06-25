@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 #nullable disable
 
@@ -22,7 +23,9 @@ namespace ubereats_user_auth.Model
         public bool IsValid { get; set; }
         public int? Mentoring { get; set; }
 
+        [JsonIgnore]
         public virtual User MentoringNavigation { get; set; }
+        [JsonIgnore]
         public virtual ICollection<User> InverseMentoringNavigation { get; set; }
     }
 }
