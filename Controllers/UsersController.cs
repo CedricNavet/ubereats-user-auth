@@ -62,8 +62,23 @@ namespace ubereats_user_auth.Controllers
             {
                 return BadRequest();
             }
+            User userInDB = await _context.Users.Where(x => x.Id == id);
+            if(userInDB != null)
+            {
+                User user1 = new User()
+                {
+                    Id = id,
+                    FirstName = user.FirstName,
+                    LastName = user.LastName,
+                    Email = user.Email,
+                    Password = userInDB.Password,
+                    IsValid = user.IsValid,
+                    Mentoring = userInDB.Mentoring,
+                    Role = userInDB.Role
+                }
+                _context.Entry(user1).State = EntityState.Modified;
+            }
 
-            _context.Entry(user).State = EntityState.Modified;
 
             try
             {
