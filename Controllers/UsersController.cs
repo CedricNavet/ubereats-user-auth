@@ -62,7 +62,7 @@ namespace ubereats_user_auth.Controllers
             {
                 return BadRequest();
             }
-            User userInDB = await _context.Users.Where(x => x.Id == id);
+            User userInDB = await _context.Users.Where(x => x.Id == id).FirstOrDefaultAsync();
             if(userInDB != null)
             {
                 User user1 = new User()
@@ -75,7 +75,7 @@ namespace ubereats_user_auth.Controllers
                     IsValid = user.IsValid,
                     Mentoring = userInDB.Mentoring,
                     Role = userInDB.Role
-                }
+                };
                 _context.Entry(user1).State = EntityState.Modified;
             }
 
