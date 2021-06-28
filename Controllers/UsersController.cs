@@ -24,7 +24,7 @@ namespace ubereats_user_auth.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<User>>> GetUsers()
         {
-            var result = await _context.Users.Where(x => x.Role.Trim() == "Customer" && x.IsValid == true).ToListAsync();
+            var result = await _context.Users.Where(x => x.Role.Trim() == "Customer").ToListAsync();
             foreach (var item in result)
             {
                 item.RefreshToken = "";
@@ -64,20 +64,15 @@ namespace ubereats_user_auth.Controllers
                 return BadRequest("WRONG ID");
             }
             User userInDB = await _context.Users.Where(x => x.Id == id).FirstOrDefaultAsync();
+
             if (userInDB != null)
             {
-                User user1 = new User()
-                {
-                    Id = user.Id,
-                    FirstName = user.FirstName,
-                    LastName = user.LastName,
-                    Email = user.Email,
-                    Password = userInDB.Password,
-                    IsValid = user.IsValid,
-                    Mentoring = userInDB.Mentoring,
-                    Role = userInDB.Role
-                };
-                _context.Entry(user1).State = EntityState.Modified;
+                userInDB.FirstName = user.FirstName;
+                userInDB.LastName = user.LastName;
+                userInDB.Email = user.Email;
+                userInDB.IsValid = user.IsValid;
+
+                _context.Users.Update(userInDB);
             }
 
             try
