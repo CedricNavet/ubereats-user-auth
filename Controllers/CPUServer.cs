@@ -8,6 +8,8 @@ using System.Threading.Tasks;
 
 namespace ubereats_user_auth.Controllers
 {
+
+    //[Microsoft.AspNetCore.Cors.EnableCors(PolicyName = "AllowWebApp")]
     [Route("api/cpu")]
     [ApiController]
     public class CPUServer : ControllerBase

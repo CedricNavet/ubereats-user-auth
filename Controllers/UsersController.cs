@@ -56,18 +56,19 @@ namespace ubereats_user_auth.Controllers
         // PUT: api/Users/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutUser(int id, User user)
+        public async Task<ActionResult<object>> PutUser(int id, User user)
         {
+            
             if (id != user.Id)
             {
-                return BadRequest();
+                return BadRequest("WRONG ID");
             }
             User userInDB = await _context.Users.Where(x => x.Id == id).FirstOrDefaultAsync();
-            if(userInDB != null)
+            if (userInDB != null)
             {
                 User user1 = new User()
                 {
-                    Id = id,
+                    Id = user.Id,
                     FirstName = user.FirstName,
                     LastName = user.LastName,
                     Email = user.Email,
@@ -79,36 +80,29 @@ namespace ubereats_user_auth.Controllers
                 _context.Entry(user1).State = EntityState.Modified;
             }
 
-
             try
             {
                 await _context.SaveChangesAsync();
             }
-            catch (DbUpdateConcurrencyException)
+            catch (Exception e)
             {
-                if (!UserExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
+
+                return BadRequest(e.Message);
             }
 
             return NoContent();
         }
 
-        // POST: api/Users
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPost]
-        public async Task<ActionResult<User>> PostUser(User user)
-        {
-            _context.Users.Add(user);
-            await _context.SaveChangesAsync();
+        //// POST: api/Users
+        //// To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        //[HttpPost]
+        //public async Task<ActionResult<User>> PostUser(User user)
+        //{
+        //    _context.Users.Add(user);
+        //    await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetUser", new { id = user.Id }, user);
-        }
+        //    return CreatedAtAction("GetUser", new { id = user.Id }, user);
+        //}
 
         // DELETE: api/Users/5
         [HttpDelete("{id}")]

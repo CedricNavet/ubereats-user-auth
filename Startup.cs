@@ -29,6 +29,16 @@ namespace ubereats_user_auth
 
             services.AddDbContext<ubereats_user_auth.Model.UberEatsAuthDBContext>(options =>
             options.UseSqlServer(Configuration.GetConnectionString("UberEatsDb")));
+            services.AddCors(options => options.AddPolicy("AllowWebApp",
+                builder => 
+                    builder
+                //.WithOrigins("http://localhost:8080")
+                .AllowAnyMethod()
+                .AllowAnyHeader()
+                .SetIsOriginAllowed(origin => true)
+                .AllowCredentials())
+            );
+
 
             services.AddControllers().AddNewtonsoftJson(options => options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
         }
@@ -43,13 +53,15 @@ namespace ubereats_user_auth
 
             app.UseHttpsRedirection();
 
-            app.UseCors(x => x
-            //.WithOrigins("http//localhost:8080")
-            .AllowAnyMethod()
-            .AllowAnyHeader()
-            .SetIsOriginAllowed(origin => true) // allow any origin
-            .AllowCredentials()); // allow credentials
-            
+            app.UseCors("AllowWebApp");
+
+            //app.UseCors(x => x
+            ////.WithOrigins("http//localhost:8080")
+            //.AllowAnyMethod()
+            //.AllowAnyHeader()
+            //.SetIsOriginAllowed(origin => false) // allow any origin
+            //.AllowCredentials()); // allow credentials
+
             app.UseRouting();
 
             app.UseAuthorization();
